@@ -47,13 +47,15 @@
 
       xhr.onloadend = function (res) {
         if (res.target.status === 200){
-          sendButton.value = 'Bericht ontvangen!';
+          sendButton.value = 'Uw bericht is ontvangen!';
         } else {
           sendButton.value = 'Er is iets misgegaan';
         }
       }
 
       xhr.send("email=" + email.value + "&bericht=" + message.value);
+      email.value = '';
+      message.value = '';
     });
   </script>
 
