@@ -7,7 +7,6 @@
   <link rel="icon" type="image/png" href="static/img/favicon.png">
   <meta name="viewport" content="initial-scale=1">
   <link href="static/styles/main.css" rel="stylesheet">
-
 </head>
 <body>
   <div class="row section">
@@ -20,14 +19,44 @@
       <div class="col-3-3">
         <h3 class="light">Meer weten?</h3>
 				<div id='formview'>
-					<form method="POST" action="http://formspree.io/info@jimqs.nl">
+					<form id="contact-form" method="post" action="http://formspree.io/info@jimqs.nl">
   					<input type="email" name="email" placeholder="Uw emailadres" />
   					<textarea name="message" placeholder="Uw vraag"></textarea>
-  					<button type="submit">Verstuur</button>
+						<input style="display: none" type="text" name="_gotcha">
+						<input id="send-button" class="submit" type="submit" value="Verstuur">
 					</form>
 				</div>
       </div>
     </div>
   </div>
+  <script type="application/javascript">
+ var contactForm = document.querySelector('#contact-form'),
+    email = contactForm.querySelector('[name="email"]'),
+    message = contactForm.querySelector('[name="message"]'),
+    sendButton = contactForm.querySelector('#send-button');
+
+    sendButton.addEventListener('click', function(event){
+      event.preventDefault(); // prevent the form to do the post.
+
+      sendButton.value = 'Bezig...';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://formspree.io/info@jimqs.nl', true);
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      xhr.onloadend = function (res) {
+        if (res.target.status === 200){
+          sendButton.value = 'Bericht ontvangen!';
+        } else {
+          sendButton.value = 'Er is iets misgegaan';
+        }
+      }
+
+      xhr.send("email=" + email.value + "&bericht=" + message.value);
+    });
+  </script>
+
+
 </body>
 </html>
